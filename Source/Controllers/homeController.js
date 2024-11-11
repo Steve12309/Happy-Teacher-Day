@@ -3,6 +3,7 @@ class HomeController {
     res.render("home", {
       layout: "main",
       function: "home",
+      style: "home",
     });
   }
 }
