@@ -335,6 +335,10 @@ canvas {
   background-color: transparent;
 }
 
+html {
+  overflow: hidden;
+}
+
 body {
   background-image: url("/Static/Images/bg.jpg");
   background-size: cover;
