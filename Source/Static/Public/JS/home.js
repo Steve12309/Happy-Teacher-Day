@@ -59,8 +59,8 @@ function handleData(data) {
 
 function renderLight(data, inputValue) {
   let timerIdLight;
-  divLoaderContainer.style = "display: none;";
   canvasElement.style = "display: none;";
+  divLoaderContainer.style = "display: none;";
   lightElement.style = "display: block;";
   timerIdLight = setTimeout(() => {
     lightElement.classList.replace("expandLight", "resizeLight");
@@ -156,11 +156,10 @@ function reset() {
 }
 
 function newShell() {
-  var left = Math.random() > 0.5;
   var shell = {};
-  shell.x = 1 * left;
-  shell.y = 1;
-  shell.xoff = (0.01 + Math.random() * 0.007) * (left ? 1 : -1);
+  shell.x = Math.random() > 0.5; // X ngẫu nhiên
+  shell.y = 0.7; // Bắt đầu từ 90% chiều cao canvas
+  shell.xoff = (0.01 + Math.random() * 0.007) * (Math.random() > 0.5 ? 1 : -1);
   shell.yoff = 0.01 + Math.random() * 0.007;
   shell.size = Math.random() * 6 + 3;
   shell.color = colors[Math.floor(Math.random() * colors.length)];
@@ -171,7 +170,7 @@ function newShell() {
 function newPass(shell) {
   var pasCount = Math.ceil(Math.pow(shell.size, 2) * Math.PI);
 
-  for (i = 0; i < pasCount; i++) {
+  for (let i = 0; i < pasCount; i++) {
     var pas = {};
     pas.x = shell.x * cwidth;
     pas.y = shell.y * cheight;
@@ -200,9 +199,7 @@ function Run() {
   }
   lastRun = performance.now();
 
-  //ctx.clearRect(0, 0, cwidth, cheight);
-  ctx.fillStyle = "rgba(0,0,0,0.25)";
-  ctx.fillRect(0, 0, cwidth, cheight);
+  ctx.clearRect(0, 0, cwidth, cheight); // Xóa canvas nhưng giữ hình nền bên dưới
 
   if (shells.length < 10 && Math.random() > 0.96) {
     newShell();
@@ -221,7 +218,8 @@ function Run() {
     shell.xoff -= shell.xoff * dt * 0.001;
     shell.yoff -= (shell.yoff + 0.2) * dt * 0.00005;
 
-    if (shell.yoff < -0.005) {
+    // Phát nổ khi pháo hoa đạt giữa màn hình hoặc tốc độ đủ chậm
+    if (shell.y < 0.5 || shell.yoff < -0.005) {
       newPass(shell);
       shells.splice(ix, 1);
     }
