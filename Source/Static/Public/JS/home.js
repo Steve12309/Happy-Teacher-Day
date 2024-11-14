@@ -58,29 +58,48 @@ function handleData(data) {
 }
 
 function renderLight(data, inputValue) {
-  canvasElement.style = "display: none;";
-  divLoaderContainer.style = "display: none;";
-  lightElement.classList.add("expandLight");
-  checkAnimationState(data, inputValue);
+  // Use requestAnimationFrame for smooth animation start
+  requestAnimationFrame(() => {
+    canvasElement.style.display = "none";
+    divLoaderContainer.style.display = "none";
+
+    // Remove and add class in separate frames to ensure proper animation
+    lightElement.classList.remove("expandLight");
+
+    requestAnimationFrame(() => {
+      lightElement.classList.add("expandLight");
+      checkAnimationState(data, inputValue);
+    });
+  });
 }
 
 function checkAnimationState(data, inputValue) {
-  if (lightElement.classList.contains("expandLight")) {
-    lightElement.addEventListener(
-      "animationend",
-      () => {
-        lightElement.classList.remove("expandLight");
-        renderEnvelope(data, inputValue);
-      },
-      { once: true }
-    );
-  }
+  // Use the more efficient animationend listener
+  const handleAnimationEnd = () => {
+    lightElement.classList.remove("expandLight");
+    lightElement.removeEventListener("animationend", handleAnimationEnd);
+
+    // Use requestAnimationFrame for smooth transition
+    requestAnimationFrame(() => {
+      renderEnvelope(data, inputValue);
+    });
+  };
+
+  lightElement.addEventListener("animationend", handleAnimationEnd, {
+    passive: true,
+  });
 }
 
 function renderEnvelope(data, inputValue) {
-  lightContainer.style = "display: none;";
-  envelopeContainer.style = "display: block;";
-  compareData(data, inputValue);
+  requestAnimationFrame(() => {
+    lightContainer.style.display = "none";
+    envelopeContainer.style.display = "block";
+
+    // Trigger layout calculations in a separate frame
+    requestAnimationFrame(() => {
+      compareData(data, inputValue);
+    });
+  });
 }
 
 function compareData(data, inputValue) {

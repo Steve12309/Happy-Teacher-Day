@@ -127,9 +127,9 @@
   padding: 0;
   box-sizing: border-box;
   position: absolute;
+  pointer-events: none; /* Prevent unnecessary event handling */
 }
 
-/* Tạo điểm sáng tự nhiên và mượt */
 .bright-spot {
   width: 100px;
   height: 100px;
@@ -141,29 +141,33 @@
     rgba(255, 255, 255, 0) 80%
   );
   position: absolute;
-  display: none;
+  opacity: 0;
+  transform: scale(1);
+  will-change: transform, opacity; /* Hint browser about animated properties */
+  display: block; /* Always display and use opacity instead */
 }
 
 .expandLight {
-  display: block;
-  animation: expandLight 6s ease-in-out forwards;
-  filter: blur(12px);
+  animation: expandLight 6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  filter: blur(8px); /* Reduced blur for better performance */
+  transform: translateZ(0); /* Force GPU acceleration */
+  backface-visibility: hidden; /* Reduce composite layers */
+  perspective: 1000px;
 }
 
-/* Hiệu ứng mở rộng mượt mà */
 @keyframes expandLight {
   0% {
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
     opacity: 0.4;
   }
   40% {
-    transform: scale(25);
+    transform: scale(25) translateZ(0);
     opacity: 1;
     background-color: white;
   }
   100% {
-    transform: scale(1);
-    opacity: 0.4;
+    transform: scale(1) translateZ(0);
+    opacity: 0;
   }
 }
 
