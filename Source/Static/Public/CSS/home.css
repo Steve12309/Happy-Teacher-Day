@@ -141,15 +141,12 @@
     rgba(255, 255, 255, 0) 80%
   );
   position: absolute;
+  display: none;
 }
 
 .expandLight {
-  animation: expandLight 8s linear backwards;
-  filter: blur(12px);
-}
-
-.resizeLight {
-  animation: resizeLight 8s linear forwards;
+  display: block;
+  animation: expandLight 6s ease-in-out forwards;
   filter: blur(12px);
 }
 
@@ -159,26 +156,18 @@
     transform: scale(1);
     opacity: 0.4;
   }
-  100% {
-    transform: scale(20);
-    opacity: 1;
-    background-color: white;
-  }
-}
-
-@keyframes resizeLight {
-  0% {
-    transform: scale(20);
+  40% {
+    transform: scale(25);
     opacity: 1;
     background-color: white;
   }
   100% {
     transform: scale(1);
-    opacity: 0;
+    opacity: 0.4;
   }
 }
 
-/* Envelop Styles*/
+/* Envelope Styles*/
 
 .envelope-container {
   position: relative;
@@ -250,38 +239,6 @@
   box-shadow: 0 0 5px var(--shadow-color);
 }
 
-.heart {
-  position: absolute;
-  top: 152px;
-  left: 50%;
-  width: 15px;
-  height: 15px;
-  background: var(--heart-color);
-  z-index: 4;
-  transform: translate(-50%, -20%) rotate(45deg);
-  transition: transform 0.5s ease-in-out 1s;
-  box-shadow: 0 1px 6px var(--shadow-color);
-  cursor: pointer;
-}
-
-.heart:before,
-.heart:after {
-  content: "";
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background-color: var(--heart-color);
-  border-radius: 50%;
-}
-
-.heart:before {
-  top: -7.5px;
-}
-
-.heart:after {
-  right: 7.5px;
-}
-
 .flap > .envelope:before {
   transform: rotateX(180deg);
   z-index: 0;
@@ -293,11 +250,6 @@
   bottom: -800px !important;
   margin-bottom: 0% !important;
   transition-delay: 1s;
-}
-
-.flap > .heart {
-  transform: rotate(90deg);
-  transition-delay: 0.4s;
 }
 
 /* Style cho hiệu ứng gõ chữ */
@@ -357,14 +309,13 @@
     height: 420px;
   }
 
-  .heart {
-    top: 146px;
-  }
-
   .typewriter {
-    font-size: 0.8em;
-    padding: 128px 80px 52px 81px;
+    font-size: 1rem;
+    margin: 126px 68px;
     line-height: 25px;
+    width: 262px;
+    height: 260px;
+    line-height: 24px;
   }
 }
 

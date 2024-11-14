@@ -58,22 +58,18 @@ function handleData(data) {
 }
 
 function renderLight(data, inputValue) {
-  let timerIdLight;
   canvasElement.style = "display: none;";
   divLoaderContainer.style = "display: none;";
-  lightElement.style = "display: block;";
-  timerIdLight = setTimeout(() => {
-    lightElement.classList.replace("expandLight", "resizeLight");
-    checkAnimationState(data, inputValue);
-    clearTimeout(timerIdLight);
-  }, 2500);
+  lightElement.classList.add("expandLight");
+  checkAnimationState(data, inputValue);
 }
 
 function checkAnimationState(data, inputValue) {
-  if (lightElement.classList.contains("resizeLight")) {
+  if (lightElement.classList.contains("expandLight")) {
     lightElement.addEventListener(
       "animationend",
       () => {
+        lightElement.classList.remove("expandLight");
         renderEnvelope(data, inputValue);
       },
       { once: true }
@@ -94,10 +90,9 @@ function compareData(data, inputValue) {
   dataArr.forEach((data) => {
     if (data.name === upInputValue) {
       finalTextContent = data.wish;
-      wishContent.textContent = finalTextContent;
+      textContent = finalTextContent;
     }
   });
-  console.log(finalTextContent);
 }
 
 SUBMIT_BTN.addEventListener("click", (e) => {
@@ -109,7 +104,7 @@ function typeWriter() {
   if (index < textContent.length) {
     textElement.innerHTML += textContent.charAt(index);
     index++;
-    setTimeout(typeWriter, 100);
+    setTimeout(typeWriter, 80);
   } else {
     // Sau khi gõ xong, thêm lớp để ẩn con nháy
     textElement.classList.add("hide-cursor");
