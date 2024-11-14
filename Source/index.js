@@ -18,6 +18,10 @@ const handlebars = exphbs.create({
 app.set("views", path.join(__dirname, "/Views"));
 app.engine("hbs", handlebars.engine);
 app.set("view engine", ".hbs");
+app.use(
+  "/Static/Images",
+  express.static(path.join(__dirname, "Static/Images"))
+);
 app.use("/Static", express.static(path.join(__dirname, "Static/Public")));
 
 Routes(app);
