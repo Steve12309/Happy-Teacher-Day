@@ -21,9 +21,10 @@ let envelopeContainer = document.querySelector(".envelope-container");
 let storingInputValue = "";
 let canvasElement = document.getElementById("Canvas");
 let wishContent = document.getElementById("text");
+let passValue = false;
 
 function handleSubmit(value) {
-  if (value) {
+  if (value && pass) {
     storingInputValue = value;
     inputValue.value = "";
     getData();
@@ -35,7 +36,7 @@ async function getData() {
     fetch("./db.json")
       .then(async (res) => {
         let data = await res.json();
-        handleData(data);
+        compareData(data, storingInputValue);
       })
       .catch((error) => {
         console.log(error);
@@ -45,19 +46,17 @@ async function getData() {
   }
 }
 
-function handleData(data) {
-  if (data && storingInputValue) {
-    let timerIdData;
-    formContainer.style = "display: none;";
-    divLoaderContainer.style = "display: flex;";
-    timerIdData = setTimeout(() => {
-      renderLight(data, storingInputValue);
-      clearTimeout(timerIdData);
-    }, 2000);
-  }
+function handleData() {
+  let timerIdData;
+  formContainer.style = "display: none;";
+  divLoaderContainer.style = "display: flex;";
+  timerIdData = setTimeout(() => {
+    renderLight();
+    clearTimeout(timerIdData);
+  }, 2000);
 }
 
-function renderLight(data, inputValue) {
+function renderLight() {
   // Use requestAnimationFrame for smooth animation start
   requestAnimationFrame(() => {
     canvasElement.style.display = "none";
@@ -68,12 +67,12 @@ function renderLight(data, inputValue) {
 
     requestAnimationFrame(() => {
       lightElement.classList.add("expandLight");
-      checkAnimationState(data, inputValue);
+      checkAnimationState();
     });
   });
 }
 
-function checkAnimationState(data, inputValue) {
+function checkAnimationState() {
   // Use the more efficient animationend listener
   const handleAnimationEnd = () => {
     lightElement.classList.remove("expandLight");
@@ -81,7 +80,7 @@ function checkAnimationState(data, inputValue) {
 
     // Use requestAnimationFrame for smooth transition
     requestAnimationFrame(() => {
-      renderEnvelope(data, inputValue);
+      renderEnvelope();
     });
   };
 
@@ -90,19 +89,15 @@ function checkAnimationState(data, inputValue) {
   });
 }
 
-function renderEnvelope(data, inputValue) {
+function renderEnvelope() {
   requestAnimationFrame(() => {
     lightContainer.style.display = "none";
     envelopeContainer.style.display = "block";
-
-    // Trigger layout calculations in a separate frame
-    requestAnimationFrame(() => {
-      compareData(data, inputValue);
-    });
   });
 }
 
 function compareData(data, inputValue) {
+  let foundDataState = false;
   let dataArr = data;
   let upInputValue = inputValue.toUpperCase();
   let finalTextContent = "";
@@ -110,8 +105,13 @@ function compareData(data, inputValue) {
     if (data.name === upInputValue) {
       finalTextContent = data.wish;
       textContent = finalTextContent;
+      foundDataState = true;
+      handleData();
     }
   });
+  if (!foundDataState) {
+    alert("Thầy/ô nhập lại tên mình nhé!");
+  }
 }
 
 SUBMIT_BTN.addEventListener("click", (e) => {
