@@ -110,7 +110,7 @@ function compareData(data, inputValue) {
     }
   });
   if (!foundDataState) {
-    alert("Thầy/ô nhập lại tên mình nhé!");
+    alert("Thầy/cô nhập lại tên mình nhé!");
   }
 }
 
